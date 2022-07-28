@@ -1,0 +1,25 @@
+pipeline{
+    agent any
+    parameters {
+        choice(name: 'name', choices: ['I am from Xenonstack', 'I am not from Xenonstack'], description: 'Pick from the two')
+    }
+    stages{
+        stage('Example') {
+            steps {
+                echo "choice: ${params.name}"
+            }
+        }
+        stage ('first') {
+            steps{
+             script {
+              if (params.name == "I am from Xenonstack") { 
+                 echo "welcome" 
+              } 
+              else if (params.name == "I am not from Xenonstack") { 
+                 echo "pipeline exists"
+              } 
+            }
+        }
+    }
+    }
+}
