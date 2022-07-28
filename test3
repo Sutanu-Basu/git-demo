@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                cleanWs ()
+                sh 'git clone https://sutanubasu-admin@bitbucket.org/sutanubasu-admin/terraform.git'
+                }
+        }
+
+	stage('terraform format check') {
+             steps{
+                 input(message: 'Hello World!' , ok: 'Proceed')
+                 input(message: 'Not' , ok: 'false')
+                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID' , credentialsId: 'sutanu-aws-cred' , secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                 sh '''
+                 pwd
+                 ls
+                 cd ${WORKSPACE}/terraform/test
+                 pwd
+                 ls
+                 terraform init
+                 terraform apply --auto-approve
+                 '''
+             }
+         }
+        // stage('terraform Init') {
+        //     steps{
+        //         sh 'terraform init'
+        //     }
+        // }
+        // stage('terraform apply') {
+        //     steps{
+        //         sh 'terraform apply --auto-approve'
+        //     }
+        // }
+    }
+    }
+
+    
+
+}
